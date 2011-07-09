@@ -9,6 +9,16 @@
  *     in the form of two-dimensional array (K = 2).
  *   * Combination::all() — returns all combinations of array elements
  *     to each other (K = N).
+ *   * Combination::total() — number of combinations.
+ *
+ * Useful links
+ *   http://www.quizful.net/post/fast-combinations-enumerate-algorithm  Binary source
+ *   http://graphics.stanford.edu/~seander/bithacks.html  Bit Twiddling Hacks
+ *   http://answers.google.com/answers/threadview/id/392914.html Algorithm to Calculate a list of Unique Combinations
+ *
+ * TODO
+ *   http://www.daniweb.com/software-development/computer-science/threads/41584
+ *   http://answers.google.com/answers/threadview/id/392914.html
  *
  * @link     http://code.google.com/p/php-combination/
  * @license  http://creativecommons.org/licenses/by-sa/3.0/
@@ -67,8 +77,6 @@ class Combination
 	 *   0 1 0 1 1
 	 *   0 0 1 1 1
 	 *
-	 * @link    http://www.quizful.net/post/fast-combinations-enumerate-algorithm  Source
-	 * @link    http://graphics.stanford.edu/~seander/bithacks.html  Bit Twiddling Hacks
 	 * @see     self::all()
 	 * @see     self::couple()
 	 * @param   int    $k
@@ -86,7 +94,7 @@ class Combination
 
 	/**
 	Returns a matrix with unique permutations in the form of two-dimensional array.
-	For the number of elements N, number of combinations will be (N - 1) * N / 2.
+	For N elements, number of combinations will be (N - 1) * N / 2.
 	The classical problem of shaking hands with 2 teams of players.
 	Example for N = 4, the intersection matrix is as follows:
 		  0 1 2 3
@@ -118,7 +126,7 @@ class Combination
 
 	/**
 	 * Returns all combinations of array elements to each other.
-	 * For the number of elements N, number of combinations will be (2 ^ N) - 1.
+	 * For N elements, number of combinations will be (2 ^ N) - 1.
 	 *
 	 * @param   array  $items  An indexed array
 	 * @return  array          Two-dimensional indexed array
@@ -135,11 +143,52 @@ class Combination
 		return $a;
 	}
 
-	//TODO
+	/**
+	 * Number of combinations
+	 * 
+	 * Find HOW MANY combinations there are is:
+	 * C(k,n) = n! / ((n-k)! r!)
+	 * Where "k" is number of items wanted in the set.
+	 * Where "n" is number of total items.
+	 * 
+	 * @param  int $k
+	 * @param  int $n
+	 * @return int
+	 */
+	public static function total($k, $n)
+	{
+		$t = 1;
+		for ($i = $n, $c = $n - ($k - 1); $i >= $c; $i--) $t *= $i;
+		for ($i = $k; $i >= 1; $i--) $t /= $i;
+		return $t;
+	}
+
+
+	/* TODO (from С code)
+	public static function enumerate($P, $K, $n_i)
+	{
+		if ($K == 0) printf("%d. %s\n", ++$count, $P);
+		$i = 0;
+		for ($i = $n_i; $i < $N; $i++)
+		{
+			$P[strlen($P)+1] = '\0';
+			$P[strlen($P)] = $S[$i];
+			self::enumerate($P, $K-1, $i+1);
+			$P[strlen($P)-1] = '\0';
+		}
+	}
+	*/
+
+	/* TODO
 	public static function tests()
 	{
-		//$s = str_pad(decbin($i), $n, '0', STR_PAD_LEFT);
-		//d($s);
+		echo '<pre>';
+		var_export(self::total(3,11));
+		echo PHP_EOL;
+		var_export(self::total2(6,32));
+		//var_export(Combination::total(4,11));
+		//Combination::tests();
 	}
+	*/
 
 }
