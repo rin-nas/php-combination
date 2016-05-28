@@ -8,3 +8,6 @@
 1. `Combination::total()` — number of combinations.
 
 Project exported from http://code.google.com/p/php-combination
+
+TODO
+https://habrahabr.ru/post/276937/#first_unread
